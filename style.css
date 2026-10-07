@@ -38,8 +38,7 @@ input, select, textarea {
 }
 
 .btn:hover {
-  background-color: #2e3160;
-  opacity: 0.95;
+  background-color: #363a6e;
 }
 
 .btn-small {
