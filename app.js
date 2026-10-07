@@ -17,7 +17,7 @@ Vue.createApp({
       lists: [],
       tasks: [],
 
-      showAddList: false,
+      showAddList: false, // affiche formulaire ajout liste
       newListName: '',
       newListColor: '#3498db',
       newTaskTitle: '',
