@@ -88,6 +88,13 @@
         <button class="btn-small" @click="addList()">Add</button>
         <button class="btn-small grey" @click="showAddList = false">Cancel</button>
       </div>
+
+      <div class="menu-bas">
+        <button :class="{ actif: page == 'home' }" @click="page = 'home'" title="Home"><img src="img/home.svg"></button>
+        <button :class="{ actif: page == 'calendar' }" @click="page = 'calendar'" title="Calendar"><img src="img/calendar.svg"></button>
+        <button :class="{ actif: page == 'map' }" @click="page = 'map'" title="Location"><img src="img/pin.svg"></button>
+        <button :class="{ actif: page == 'settings' }" @click="page = 'settings'" title="Settings"><img src="img/settings.svg"></button>
+      </div>
     </div>
 
     <div class="main">
@@ -269,13 +276,6 @@
         </div>
       </div>
 
-    </div>
-
-    <div class="menu-bas">
-      <button :class="{ actif: page == 'home' }" @click="page = 'home'" title="Home"><img src="img/home.svg"></button>
-      <button :class="{ actif: page == 'calendar' }" @click="page = 'calendar'" title="Calendar"><img src="img/calendar.svg"></button>
-      <button :class="{ actif: page == 'map' }" @click="page = 'map'" title="Location"><img src="img/pin.svg"></button>
-      <button :class="{ actif: page == 'settings' }" @click="page = 'settings'" title="Settings"><img src="img/settings.svg"></button>
     </div>
 
   </div>
