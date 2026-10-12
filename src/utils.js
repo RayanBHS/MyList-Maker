@@ -1,3 +1,4 @@
+// helpers du projet
 export function dateToString(d) {
   let m = d.getMonth() + 1
   let j = d.getDate()
