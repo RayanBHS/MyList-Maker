@@ -1,26 +1,28 @@
 <template>
   <div class="login-page">
-    <div class="login-box">
-      <img src="/img/logo.svg" class="login-logo" alt="logo">
-      <h1>MyList Maker</h1>
+    <div class="login-logo">
+      <img src="/img/logo.png" alt="logo">
+      <span>MyList<br>Maker</span>
+    </div>
 
-      <div v-if="showRegister == false">
-        <h2>Login</h2>
-        <input type="text" v-model="username" placeholder="Username">
-        <input type="password" v-model="password" placeholder="Password">
-        <p class="error" v-if="error != ''">{{ error }}</p>
-        <button class="btn" @click="login()">Log in</button>
-        <p class="small">No account ? <a href="#" @click="openRegister()">Create one</a></p>
+    <div class="login-box" v-if="showRegister == false">
+      <input type="text" v-model="username" placeholder="Account">
+      <input type="password" v-model="password" placeholder="Password">
+      <p class="error" v-if="error != ''">{{ error }}</p>
+      <div class="login-bas">
+        <a href="#" @click="openRegister()">+ Create new account</a>
+        <button class="connect" @click="login()">Connect</button>
       </div>
+    </div>
 
-      <div v-else>
-        <h2>Register</h2>
-        <input type="text" v-model="username" placeholder="Username">
-        <input type="password" v-model="password" placeholder="Password">
-        <input type="password" v-model="password2" placeholder="Confirm password">
-        <p class="error" v-if="error != ''">{{ error }}</p>
-        <button class="btn" @click="register()">Create account</button>
-        <p class="small">Already have an account ? <a href="#" @click="showRegister = false">Log in</a></p>
+    <div class="login-box" v-else>
+      <input type="text" v-model="username" placeholder="Account">
+      <input type="password" v-model="password" placeholder="Password">
+      <input type="password" v-model="password2" placeholder="Confirm password">
+      <p class="error" v-if="error != ''">{{ error }}</p>
+      <div class="login-bas">
+        <a href="#" @click="openLogin()">I already have an account</a>
+        <button class="connect" @click="register()">Create</button>
       </div>
     </div>
   </div>
@@ -51,6 +53,11 @@ export default {
 
     openRegister() {
       this.showRegister = true
+      this.error = ''
+    },
+
+    openLogin() {
+      this.showRegister = false
       this.error = ''
     },
 
