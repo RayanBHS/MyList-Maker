@@ -15,7 +15,7 @@ npm run dev
 
 Then open http://localhost:5173
 
-For now the data is saved in the localStorage of the browser. The back-end (Node.js + MySQL) is for milestone 3.
+For now there is no back-end : the lists and tasks are example data in App.vue and the login page only opens the app. The back-end (Node.js + MySQL) and the real login are for milestone 3.
 
 ## Structure
 
@@ -27,7 +27,7 @@ For now the data is saved in the localStorage of the browser. The back-end (Node
 
 ## Features
 
-- login / register
+- login page (design only)
 - multiple lists with a color
 - tasks with 3 status : To Do, Doing, Done
 - flag a task, add a date, a description and a location

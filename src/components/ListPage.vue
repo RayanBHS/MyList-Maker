@@ -47,19 +47,19 @@
 
       <div class="detail" v-if="currentTask != null">
         <div class="detail-top">
-          <input class="detail-titre" type="text" v-model="currentTask.title" @change="$emit('save')">
+          <input class="detail-titre" type="text" v-model="currentTask.title">
           <img v-if="currentTask.flagged" src="/img/flag.svg" class="flag-btn" @click="toggleFlag()">
           <img v-else src="/img/flag-empty.svg" class="flag-btn" @click="toggleFlag()">
         </div>
 
         <label>Description</label>
-        <textarea v-model="currentTask.description" @change="$emit('save')" placeholder="Add a description"></textarea>
+        <textarea v-model="currentTask.description" placeholder="Add a description"></textarea>
 
         <label>Date</label>
-        <input type="date" v-model="currentTask.date" @change="$emit('save')">
+        <input type="date" v-model="currentTask.date">
 
         <label>Location</label>
-        <input type="text" v-model="currentTask.location" @change="$emit('save')" placeholder="ex: Concordia University">
+        <input type="text" v-model="currentTask.location" placeholder="ex: Concordia University">
         <iframe class="petite-map" v-if="currentTask.location != ''" :src="getMapUrl(currentTask.location)"></iframe>
 
         <label>Status</label>
@@ -83,7 +83,7 @@ import { formatDate, getListName, getListColor, getMapUrl } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentListId', 'currentTask'],
-  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task', 'save'],
+  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task'],
 
   data() {
     return {
@@ -124,7 +124,6 @@ export default {
 
     changeStatus(status) {
       this.currentTask.status = status
-      this.$emit('save')
     },
 
     toggleFlag() {
@@ -133,7 +132,6 @@ export default {
       } else {
         this.currentTask.flagged = true
       }
-      this.$emit('save')
     }
   }
 }

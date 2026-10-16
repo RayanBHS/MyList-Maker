@@ -63,3 +63,7 @@ export function getTodayTasks(tasks) {
   }
   return result
 }
+
+export function getMapUrl(place) {
+  return 'https://maps.google.com/maps?q=' + place + '&z=13&output=embed'
+}

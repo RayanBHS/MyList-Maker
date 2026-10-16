@@ -13,7 +13,7 @@
       @change-page="changePage"
     />
 
-    <div class="main">
+    <main class="main">
       <HomePage
         v-if="page == 'home'"
         :lists="lists"
@@ -35,7 +35,6 @@
         @delete-task="deleteTask"
         @delete-list="deleteList"
         @close-task="currentTask = null"
-        @save="save"
       />
 
       <FilterPage
@@ -60,9 +59,8 @@
         v-if="page == 'settings'"
         :currentUser="currentUser"
         @logout="logout"
-        @reset="resetData"
       />
-    </div>
+    </main>
   </div>
 </template>
 
@@ -76,6 +74,8 @@ import CalendarPage from './components/CalendarPage.vue'
 import MapPage from './components/MapPage.vue'
 import SettingsPage from './components/SettingsPage.vue'
 import { dateToString } from './utils.js'
+
+let today = dateToString(new Date())
 
 export default {
   components: {
@@ -97,72 +97,34 @@ export default {
       currentListId: null,
       currentTask: null,
       filter: 'all',
-      lists: [],
-      tasks: []
-    }
-  },
-
-  mounted() {
-    let user = localStorage.getItem('currentUser')
-    if (user != null) {
-      this.onLogged(user)
+      lists: [
+        { id: 1, name: 'Web\'s Work', color: '#3498db' },
+        { id: 2, name: 'Toronto Trip', color: '#e74c3c' },
+        { id: 3, name: 'Chores', color: '#2ecc71' }
+      ],
+      tasks: [
+        { id: 1, listId: 1, title: 'Starting Project', description: 'Do the milestone 1 and choose the subject of the project with the team', date: today, location: 'Concordia University', status: 'doing', flagged: true },
+        { id: 2, listId: 1, title: 'First step of work', description: '', date: '', location: '', status: 'todo', flagged: false },
+        { id: 3, listId: 1, title: 'Work together at Concordia', description: '', date: '', location: 'Concordia University', status: 'todo', flagged: false },
+        { id: 4, listId: 1, title: 'New ideas for the project', description: '', date: '', location: '', status: 'done', flagged: false },
+        { id: 5, listId: 2, title: 'Go to the Niagara falls', description: 'Take the bus from Toronto', date: '', location: 'Niagara Falls', status: 'todo', flagged: true },
+        { id: 6, listId: 2, title: 'Return to Paris', description: '', date: '', location: 'Paris', status: 'todo', flagged: true },
+        { id: 7, listId: 3, title: 'Do the groceries', description: 'milk, eggs, bread', date: today, location: '', status: 'todo', flagged: false }
+      ]
     }
   },
 
   methods: {
     onLogged(username) {
-      localStorage.setItem('currentUser', username)
       this.currentUser = username
       this.isLogged = true
-      this.loadData()
     },
 
     logout() {
-      localStorage.removeItem('currentUser')
       this.isLogged = false
       this.currentUser = ''
-      this.lists = []
-      this.tasks = []
       this.page = 'home'
       this.currentTask = null
-    },
-
-    loadData() {
-      let data = JSON.parse(localStorage.getItem('data_' + this.currentUser))
-      if (data == null) {
-        let today = dateToString(new Date())
-        this.lists = [
-          { id: 1, name: 'Web\'s Work', color: '#3498db' },
-          { id: 2, name: 'Toronto Trip', color: '#e74c3c' },
-          { id: 3, name: 'Chores', color: '#2ecc71' }
-        ]
-        this.tasks = [
-          { id: 1, listId: 1, title: 'Starting Project', description: 'Do the milestone 1 and choose the subject of the project with the team', date: today, location: 'Concordia University', status: 'doing', flagged: true },
-          { id: 2, listId: 1, title: 'First step of work', description: '', date: '', location: '', status: 'todo', flagged: false },
-          { id: 3, listId: 1, title: 'Work together at Concordia', description: '', date: '', location: 'Concordia University', status: 'todo', flagged: false },
-          { id: 4, listId: 1, title: 'New ideas for the project', description: '', date: '', location: '', status: 'done', flagged: false },
-          { id: 5, listId: 2, title: 'Go to the Niagara falls', description: 'Take the bus from Toronto', date: '', location: 'Niagara Falls', status: 'todo', flagged: true },
-          { id: 6, listId: 2, title: 'Return to Paris', description: '', date: '', location: 'Paris', status: 'todo', flagged: true },
-          { id: 7, listId: 3, title: 'Do the groceries', description: 'milk, eggs, bread', date: today, location: '', status: 'todo', flagged: false }
-        ]
-        this.save()
-      } else {
-        this.lists = data.lists
-        this.tasks = data.tasks
-      }
-    },
-
-    save() {
-      let data = { lists: this.lists, tasks: this.tasks }
-      localStorage.setItem('data_' + this.currentUser, JSON.stringify(data))
-    },
-
-    resetData() {
-      if (confirm('Are you sure ? Everything will be deleted')) {
-        localStorage.removeItem('data_' + this.currentUser)
-        this.loadData()
-        this.page = 'home'
-      }
     },
 
     changePage(page) {
@@ -190,7 +152,6 @@ export default {
         }
       }
       this.lists.push({ id: newId, name: name, color: color })
-      this.save()
       this.openList(newId)
     },
 
@@ -212,7 +173,6 @@ export default {
       }
       this.lists = newLists
       this.tasks = newTasks
-      this.save()
       this.page = 'home'
     },
 
@@ -233,7 +193,6 @@ export default {
         status: 'todo',
         flagged: false
       })
-      this.save()
     },
 
     deleteTask(task) {
@@ -245,7 +204,6 @@ export default {
       }
       this.tasks = newTasks
       this.currentTask = null
-      this.save()
     },
 
     openTask(task) {
@@ -260,7 +218,6 @@ export default {
       } else {
         task.status = 'done'
       }
-      this.save()
     }
   }
 }

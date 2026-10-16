@@ -1,8 +1,8 @@
 <template>
   <div class="gauche">
-    <div class="sidebar">
+    <aside class="sidebar">
       <div class="logo">
-        <img src="/img/logo.png" alt="logo">
+        <img src="/img/logo.png" alt="MyList Maker logo">
         <span>MyList<br>Maker</span>
       </div>
 
@@ -49,26 +49,26 @@
         <button class="btn-small" @click="addList()">Add</button>
         <button class="btn-small grey" @click="showAddList = false">Cancel</button>
       </div>
-    </div>
+    </aside>
 
-    <div class="menu-bas">
+    <nav class="menu-bas">
       <button @click="$emit('change-page', 'home')" title="Home">
-        <img v-if="page == 'home'" src="/img/nav-home-bold.svg">
-        <img v-else src="/img/nav-home.svg">
+        <img v-if="page == 'home'" src="/img/nav-home-bold.svg" alt="Home">
+        <img v-else src="/img/nav-home.svg" alt="Home">
       </button>
       <button @click="$emit('change-page', 'calendar')" title="Calendar">
-        <img v-if="page == 'calendar'" src="/img/nav-calendar-bold.svg">
-        <img v-else src="/img/nav-calendar.svg">
+        <img v-if="page == 'calendar'" src="/img/nav-calendar-bold.svg" alt="Calendar">
+        <img v-else src="/img/nav-calendar.svg" alt="Calendar">
       </button>
       <button @click="$emit('change-page', 'map')" title="Location">
-        <img v-if="page == 'map'" src="/img/nav-pin-bold.svg">
-        <img v-else src="/img/nav-pin.svg">
+        <img v-if="page == 'map'" src="/img/nav-pin-bold.svg" alt="Location">
+        <img v-else src="/img/nav-pin.svg" alt="Location">
       </button>
       <button @click="$emit('change-page', 'settings')" title="Settings">
-        <img v-if="page == 'settings'" src="/img/nav-settings-bold.svg">
-        <img v-else src="/img/nav-settings.svg">
+        <img v-if="page == 'settings'" src="/img/nav-settings-bold.svg" alt="Settings">
+        <img v-else src="/img/nav-settings.svg" alt="Settings">
       </button>
-    </div>
+    </nav>
   </div>
 </template>
 

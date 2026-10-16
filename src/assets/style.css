@@ -142,14 +142,6 @@ input, select, textarea {
   background-color: #3500a8;
 }
 
-.error {
-  color: #b00020;
-  font-size: 14px;
-  font-weight: bold;
-  margin-top: -10px;
-  margin-left: 25px;
-}
-
 
 .container {
   display: flex;
