@@ -11,26 +11,27 @@
           </div>
         </div>
       </div>
-      <iframe class="grande-map" :src="getMapUrl(mapSearch)"></iframe>
+      <div class="map-construction grande">
+        <img src="/img/pin.svg" alt="">
+        <h2>Map in construction</h2>
+        <p>We are still working on the map, it will show where your tasks are.</p>
+        <p v-if="mapSearch != ''">Selected place : <b>{{ mapSearch }}</b></p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getMapUrl } from '../utils.js'
-
 export default {
   props: ['tasks'],
 
   data() {
     return {
-      mapSearch: 'Montreal'
+      mapSearch: ''
     }
   },
 
   methods: {
-    getMapUrl,
-
     getTasksWithLocation() {
       let result = []
       for (let i = 0; i < this.tasks.length; i++) {

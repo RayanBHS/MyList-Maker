@@ -33,4 +33,4 @@ For now there is no back-end : the lists and tasks are example data in App.vue a
 - flag a task, add a date, a description and a location
 - Scheduled / Flagged / Today / All filters
 - calendar
-- map with the tasks that have a location
+- location page (map still in construction)

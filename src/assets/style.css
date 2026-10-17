@@ -396,14 +396,6 @@ input, select, textarea {
   border-radius: 10px;
 }
 
-.petite-map {
-  width: 100%;
-  height: 200px;
-  border: none;
-  border-radius: 10px;
-  margin-top: 5px;
-}
-
 .titre-liste {
   display: flex;
   justify-content: space-between;
@@ -565,11 +557,36 @@ input, select, textarea {
   padding: 10px;
 }
 
-.grande-map {
+.map-construction {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #eceef5;
+  border: 3px dashed #96a0bb;
+  border-radius: 12px;
+  color: #666666;
+  padding: 20px;
+}
+
+.map-construction img {
+  width: 40px;
+  opacity: 0.5;
+}
+
+.map-construction h2 {
+  color: #4a4e8c;
+  margin-bottom: 5px;
+}
+
+.map-construction.petite {
+  height: 200px;
+}
+
+.map-construction.grande {
   flex: 1;
   height: 70vh;
-  border: none;
-  border-radius: 12px;
 }
 
 @media (max-width: 800px) {

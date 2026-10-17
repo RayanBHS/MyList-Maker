@@ -29,14 +29,17 @@
         </div>
 
         <h4 class="titre-map">Location</h4>
-        <iframe class="petite-map" :src="getMapUrl('Montreal')"></iframe>
+        <div class="map-construction petite">
+          <img src="/img/pin.svg" alt="">
+          <p>Map in construction</p>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate, getListColor, getFlaggedTasks, getMapUrl } from '../utils.js'
+import { formatDate, getListColor, getFlaggedTasks } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentUser'],
@@ -46,7 +49,6 @@ export default {
     formatDate,
     getListColor,
     getFlaggedTasks,
-    getMapUrl,
 
     getNextTasks() {
       let withDate = []

@@ -60,7 +60,6 @@
 
         <label>Location</label>
         <input type="text" v-model="currentTask.location" placeholder="ex: Concordia University">
-        <iframe class="petite-map" v-if="currentTask.location != ''" :src="getMapUrl(currentTask.location)"></iframe>
 
         <label>Status</label>
         <div class="status-btns">
@@ -79,7 +78,7 @@
 </template>
 
 <script>
-import { formatDate, getListName, getListColor, getMapUrl } from '../utils.js'
+import { formatDate, getListName, getListColor } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentListId', 'currentTask'],
@@ -95,7 +94,6 @@ export default {
     formatDate,
     getListName,
     getListColor,
-    getMapUrl,
 
     getTasksByStatus(status) {
       let result = []
