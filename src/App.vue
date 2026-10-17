@@ -35,6 +35,7 @@
         @delete-task="deleteTask"
         @delete-list="deleteList"
         @close-task="currentTask = null"
+        @update-task="updateTask"
       />
 
       <FilterPage
@@ -210,6 +211,10 @@ export default {
       this.currentListId = task.listId
       this.page = 'list'
       this.currentTask = task
+    },
+
+    updateTask(field, value) {
+      this.currentTask[field] = value
     },
 
     checkTask(task) {
