@@ -45,21 +45,21 @@
         </div>
       </div>
 
-      <div class="detail" v-if="currentTask != null">
+      <div class="detail" v-if="currentTask != null && currentTask.listId == currentListId">
         <div class="detail-top">
-          <input class="detail-titre" type="text" :value="currentTask.title" @input="$emit('update-task', 'title', $event.target.value)">
+          <input class="detail-titre" type="text" v-model="currentTask.title">
           <img v-if="currentTask.flagged" src="/img/flag.svg" class="flag-btn" @click="toggleFlag()">
           <img v-else src="/img/flag-empty.svg" class="flag-btn" @click="toggleFlag()">
         </div>
 
         <label>Description</label>
-        <textarea :value="currentTask.description" @input="$emit('update-task', 'description', $event.target.value)" placeholder="Add a description"></textarea>
+        <textarea v-model="currentTask.description" placeholder="Add a description"></textarea>
 
         <label>Date</label>
-        <input type="date" :value="currentTask.date" @input="$emit('update-task', 'date', $event.target.value)">
+        <input type="date" v-model="currentTask.date">
 
         <label>Location</label>
-        <input type="text" :value="currentTask.location" @input="$emit('update-task', 'location', $event.target.value)" placeholder="ex: Concordia University">
+        <input type="text" v-model="currentTask.location" placeholder="ex: Concordia University">
 
         <label>Status</label>
         <div class="status-btns">
@@ -82,7 +82,7 @@ import { formatDate, getListName, getListColor } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentListId', 'currentTask'],
-  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task', 'update-task'],
+  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task'],
 
   data() {
     return {
@@ -121,14 +121,14 @@ export default {
     },
 
     changeStatus(status) {
-      this.$emit('update-task', 'status', status)
+      this.currentTask.status = status
     },
 
     toggleFlag() {
       if (this.currentTask.flagged == true) {
-        this.$emit('update-task', 'flagged', false)
+        this.currentTask.flagged = false
       } else {
-        this.$emit('update-task', 'flagged', true)
+        this.currentTask.flagged = true
       }
     }
   }

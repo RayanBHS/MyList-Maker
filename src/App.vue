@@ -5,60 +5,24 @@
     <SideBar
       :lists="lists"
       :tasks="tasks"
-      :page="page"
       :currentListId="currentListId"
-      @open-filter="openFilter"
-      @open-list="openList"
       @add-list="addList"
-      @change-page="changePage"
     />
 
     <main class="main">
-      <HomePage
-        v-if="page == 'home'"
+      <router-view
         :lists="lists"
         :tasks="tasks"
         :currentUser="currentUser"
-        @open-task="openTask"
-        @check-task="checkTask"
-      />
-
-      <ListPage
-        v-if="page == 'list'"
-        :lists="lists"
-        :tasks="tasks"
         :currentListId="currentListId"
         :currentTask="currentTask"
+        :filter="filter"
         @open-task="openTask"
         @check-task="checkTask"
         @add-task="addTask"
         @delete-task="deleteTask"
         @delete-list="deleteList"
         @close-task="currentTask = null"
-        @update-task="updateTask"
-      />
-
-      <FilterPage
-        v-if="page == 'filter'"
-        :lists="lists"
-        :tasks="tasks"
-        :filter="filter"
-        @open-task="openTask"
-        @check-task="checkTask"
-      />
-
-      <CalendarPage
-        v-if="page == 'calendar'"
-        :lists="lists"
-        :tasks="tasks"
-        @open-task="openTask"
-      />
-
-      <MapPage v-if="page == 'map'" :tasks="tasks" />
-
-      <SettingsPage
-        v-if="page == 'settings'"
-        :currentUser="currentUser"
         @logout="logout"
       />
     </main>
@@ -68,12 +32,6 @@
 <script>
 import LoginPage from './components/LoginPage.vue'
 import SideBar from './components/SideBar.vue'
-import HomePage from './components/HomePage.vue'
-import ListPage from './components/ListPage.vue'
-import FilterPage from './components/FilterPage.vue'
-import CalendarPage from './components/CalendarPage.vue'
-import MapPage from './components/MapPage.vue'
-import SettingsPage from './components/SettingsPage.vue'
 import { dateToString } from './utils.js'
 
 let today = dateToString(new Date())
@@ -81,23 +39,14 @@ let today = dateToString(new Date())
 export default {
   components: {
     LoginPage,
-    SideBar,
-    HomePage,
-    ListPage,
-    FilterPage,
-    CalendarPage,
-    MapPage,
-    SettingsPage
+    SideBar
   },
 
   data() {
     return {
       isLogged: false,
       currentUser: '',
-      page: 'home',
-      currentListId: null,
       currentTask: null,
-      filter: 'all',
       lists: [
         { id: 1, name: 'Web\'s Work', color: '#3498db' },
         { id: 2, name: 'Toronto Trip', color: '#e74c3c' },
@@ -115,6 +64,21 @@ export default {
     }
   },
 
+  computed: {
+    // the id of the list is in the url : /list/2
+    currentListId() {
+      if (this.$route.params.id) {
+        return parseInt(this.$route.params.id)
+      }
+      return null
+    },
+
+    // the filter is in the url : /filter/flagged
+    filter() {
+      return this.$route.params.filter
+    }
+  },
+
   methods: {
     onLogged(username) {
       this.currentUser = username
@@ -124,25 +88,8 @@ export default {
     logout() {
       this.isLogged = false
       this.currentUser = ''
-      this.page = 'home'
       this.currentTask = null
-    },
-
-    changePage(page) {
-      this.page = page
-      this.currentTask = null
-    },
-
-    openList(id) {
-      this.currentListId = id
-      this.currentTask = null
-      this.page = 'list'
-    },
-
-    openFilter(f) {
-      this.filter = f
-      this.currentTask = null
-      this.page = 'filter'
+      this.$router.push('/')
     },
 
     addList(name, color) {
@@ -153,7 +100,7 @@ export default {
         }
       }
       this.lists.push({ id: newId, name: name, color: color })
-      this.openList(newId)
+      this.$router.push('/list/' + newId)
     },
 
     deleteList(id) {
@@ -174,7 +121,7 @@ export default {
       }
       this.lists = newLists
       this.tasks = newTasks
-      this.page = 'home'
+      this.$router.push('/')
     },
 
     addTask(title) {
@@ -208,13 +155,8 @@ export default {
     },
 
     openTask(task) {
-      this.currentListId = task.listId
-      this.page = 'list'
       this.currentTask = task
-    },
-
-    updateTask(field, value) {
-      this.currentTask[field] = value
+      this.$router.push('/list/' + task.listId)
     },
 
     checkTask(task) {

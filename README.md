@@ -20,7 +20,9 @@ For now there is no back-end : the lists and tasks are example data in App.vue a
 ## Structure
 
 - `src/App.vue` : main component, data and methods of the app
-- `src/components/` : LoginPage, SideBar, HomePage, ListPage, FilterPage, CalendarPage, MapPage, SettingsPage
+- `src/router/index.js` : the routes of the app (one url for each page)
+- `src/components/` : LoginPage, SideBar
+- `src/views/` : the pages (HomePage, ListPage, FilterPage, CalendarPage, MapPage, SettingsPage)
 - `src/utils.js` : functions used in several components
 - `src/assets/style.css` : the design (vanilla CSS)
 - `public/img/` : logo and icons

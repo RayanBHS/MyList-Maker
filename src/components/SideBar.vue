@@ -7,31 +7,31 @@
       </div>
 
       <div class="cases">
-        <div class="case" @click="$emit('open-filter', 'scheduled')">
+        <router-link to="/filter/scheduled" class="case">
           <div class="case-top"><img src="/img/calendar.svg" class="icone"><b>{{ countScheduled() }}</b></div>
           <p>Scheduled</p>
-        </div>
-        <div class="case" @click="$emit('open-filter', 'flagged')">
+        </router-link>
+        <router-link to="/filter/flagged" class="case">
           <div class="case-top"><img src="/img/flag.svg" class="icone"><b>{{ countFlagged() }}</b></div>
           <p>Flagged</p>
-        </div>
-        <div class="case" @click="$emit('open-filter', 'today')">
+        </router-link>
+        <router-link to="/filter/today" class="case">
           <div class="case-top"><img src="/img/clock.svg" class="icone"><b>{{ countToday() }}</b></div>
           <p>Today</p>
-        </div>
-        <div class="case" @click="$emit('open-filter', 'all')">
+        </router-link>
+        <router-link to="/filter/all" class="case">
           <div class="case-top"><img src="/img/inbox.svg" class="icone"><b>{{ tasks.length }}</b></div>
           <p>All</p>
-        </div>
+        </router-link>
       </div>
 
       <h3>My Lists</h3>
       <div class="mes-listes">
-        <div v-for="list in lists" :key="list.id" class="une-liste" :class="{ selected: page == 'list' && currentListId == list.id }" @click="$emit('open-list', list.id)">
+        <router-link v-for="list in lists" :key="list.id" :to="'/list/' + list.id" class="une-liste" :class="{ selected: currentListId == list.id }">
           <span class="rond" :style="{ backgroundColor: list.color }"></span>
           <span>{{ list.name }}</span>
           <span class="nb">{{ countTasksOfList(list.id) }}</span>
-        </div>
+        </router-link>
       </div>
 
       <div class="add-list" v-if="showAddList == false">
@@ -52,22 +52,22 @@
     </aside>
 
     <nav class="menu-bas">
-      <button @click="$emit('change-page', 'home')" title="Home">
-        <img v-if="page == 'home'" src="/img/nav-home-bold.svg" alt="Home">
+      <router-link to="/" title="Home">
+        <img v-if="$route.name == 'home'" src="/img/nav-home-bold.svg" alt="Home">
         <img v-else src="/img/nav-home.svg" alt="Home">
-      </button>
-      <button @click="$emit('change-page', 'calendar')" title="Calendar">
-        <img v-if="page == 'calendar'" src="/img/nav-calendar-bold.svg" alt="Calendar">
+      </router-link>
+      <router-link to="/calendar" title="Calendar">
+        <img v-if="$route.name == 'calendar'" src="/img/nav-calendar-bold.svg" alt="Calendar">
         <img v-else src="/img/nav-calendar.svg" alt="Calendar">
-      </button>
-      <button @click="$emit('change-page', 'map')" title="Location">
-        <img v-if="page == 'map'" src="/img/nav-pin-bold.svg" alt="Location">
+      </router-link>
+      <router-link to="/map" title="Location">
+        <img v-if="$route.name == 'map'" src="/img/nav-pin-bold.svg" alt="Location">
         <img v-else src="/img/nav-pin.svg" alt="Location">
-      </button>
-      <button @click="$emit('change-page', 'settings')" title="Settings">
-        <img v-if="page == 'settings'" src="/img/nav-settings-bold.svg" alt="Settings">
+      </router-link>
+      <router-link to="/settings" title="Settings">
+        <img v-if="$route.name == 'settings'" src="/img/nav-settings-bold.svg" alt="Settings">
         <img v-else src="/img/nav-settings.svg" alt="Settings">
-      </button>
+      </router-link>
     </nav>
   </div>
 </template>
@@ -76,8 +76,8 @@
 import { getFlaggedTasks, getScheduledTasks, getTodayTasks } from '../utils.js'
 
 export default {
-  props: ['lists', 'tasks', 'page', 'currentListId'],
-  emits: ['open-filter', 'open-list', 'add-list', 'change-page'],
+  props: ['lists', 'tasks', 'currentListId'],
+  emits: ['add-list'],
 
   data() {
     return {
