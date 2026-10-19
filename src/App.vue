@@ -30,6 +30,7 @@
 </template>
 
 <script>
+// navigation vue router
 import LoginPage from './components/LoginPage.vue'
 import SideBar from './components/SideBar.vue'
 import { dateToString } from './utils.js'
