@@ -109,6 +109,22 @@ input, select, textarea {
   color: black;
 }
 
+.chargement {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #96a0bb;
+  font-size: 20px;
+}
+
+.login-erreur {
+  color: #7a0000;
+  font-weight: bold;
+  font-size: 14px;
+  margin: -10px 0 18px 25px;
+}
+
 .login-bas {
   display: flex;
   justify-content: space-between;
@@ -124,6 +140,11 @@ input, select, textarea {
 
 .login-bas a:hover {
   text-decoration: underline;
+}
+
+.connect:disabled {
+  opacity: 0.6;
+  cursor: wait;
 }
 
 .connect {
