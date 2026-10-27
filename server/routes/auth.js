@@ -1,7 +1,8 @@
 import { Router } from 'express'
 import bcrypt from 'bcryptjs'
-import pool from '../db.js'
-import { createSession, hashToken, requireAuth } from '../auth.js'
+import { Op } from 'sequelize'
+import { User, Session } from '../models/index.js'
+import { createSession, hashToken, requireAuth } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -14,33 +15,30 @@ router.post('/register', async (req, res) => {
   if (password.length < 6) {
     return res.status(400).json({ error: 'Password must have at least 6 characters' })
   }
-  const [exists] = await pool.query('SELECT id_user FROM `user` WHERE username = ? OR email = ?', [username, email])
-  if (exists.length > 0) {
+  const exists = await User.findOne({ where: { [Op.or]: [{ username: username }, { email: email }] } })
+  if (exists != null) {
     return res.status(409).json({ error: 'Username or email already used' })
   }
   const hash = await bcrypt.hash(password, 10)
-  const [result] = await pool.query(
-    'INSERT INTO `user` (username, email, password_hash) VALUES (?, ?, ?)',
-    [username, email, hash]
-  )
-  const token = await createSession(result.insertId)
-  res.status(201).json({ token, user: { id: result.insertId, username } })
+  const user = await User.create({ username: username, email: email, password_hash: hash })
+  const token = await createSession(user.id_user)
+  res.status(201).json({ token, user: { id: user.id_user, username: user.username } })
 })
 
 // POST /api/auth/login  { username, password }
 router.post('/login', async (req, res) => {
   const { username, password } = req.body
-  const [rows] = await pool.query('SELECT * FROM `user` WHERE username = ?', [username])
-  if (rows.length == 0 || (await bcrypt.compare(password || '', rows[0].password_hash)) == false) {
+  const user = await User.findOne({ where: { username: username || '' } })
+  if (user == null || (await bcrypt.compare(password || '', user.password_hash)) == false) {
     return res.status(401).json({ error: 'Wrong username or password' })
   }
-  const token = await createSession(rows[0].id_user)
-  res.json({ token, user: { id: rows[0].id_user, username: rows[0].username } })
+  const token = await createSession(user.id_user)
+  res.json({ token, user: { id: user.id_user, username: user.username } })
 })
 
 // POST /api/auth/logout
 router.post('/logout', requireAuth, async (req, res) => {
-  await pool.query('DELETE FROM session WHERE token_hash = ?', [hashToken(req.token)])
+  await Session.destroy({ where: { token_hash: hashToken(req.token) } })
   res.json({ ok: true })
 })
 

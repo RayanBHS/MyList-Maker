@@ -1,27 +1,31 @@
-// Crée la base à partir de sql/schema.sql (et sql/seed.sql avec --seed)
-// Utilisation :  npm run db:init   ou   npm run db:seed
+// Crée la base et les tables à partir des modèles Sequelize
+// Utilisation :  npm run db:init   (tables vides)   ou   npm run db:seed   (avec les données d'exemple)
+// ATTENTION : les tables existantes sont supprimées puis recréées.
 import 'dotenv/config'
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import mysql from 'mysql2/promise'
+import sequelize from './config/db.js'
+import './models/index.js'
+import seed from './seed-data.js'
 
-const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'sql')
+const dbName = process.env.DB_NAME || 'mylist_maker'
 
+// 1. la base de données doit exister avant que Sequelize s'y connecte
 const connection = await mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  multipleStatements: true
+  password: process.env.DB_PASSWORD || ''
 })
+await connection.query('CREATE DATABASE IF NOT EXISTS `' + dbName + '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')
+await connection.end()
 
-await connection.query(fs.readFileSync(path.join(dir, 'schema.sql'), 'utf8'))
-console.log('Database created (schema.sql)')
+// 2. Sequelize crée les tables à partir des modèles
+await sequelize.sync({ force: true })
+console.log('Database "' + dbName + '" created with the 4 tables')
 
 if (process.argv.includes('--seed')) {
-  await connection.query(fs.readFileSync(path.join(dir, 'seed.sql'), 'utf8'))
-  console.log('Example data added (seed.sql) - account : demo / demo1234')
+  await seed()
+  console.log('Example data added - account : demo / demo1234')
 }
 
-await connection.end()
+await sequelize.close()
