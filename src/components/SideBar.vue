@@ -8,19 +8,19 @@
 
       <div class="cases">
         <router-link to="/filter/scheduled" class="case">
-          <div class="case-top"><img src="/img/calendar.svg" class="icone"><b>{{ countScheduled() }}</b></div>
+          <div class="case-top"><img src="/img/ic-calendar.svg" alt=""><b>{{ countScheduled() }}</b></div>
           <p>Scheduled</p>
         </router-link>
         <router-link to="/filter/flagged" class="case">
-          <div class="case-top"><img src="/img/flag.svg" class="icone"><b>{{ countFlagged() }}</b></div>
+          <div class="case-top"><img src="/img/ic-flag.svg" alt=""><b>{{ countFlagged() }}</b></div>
           <p>Flagged</p>
         </router-link>
         <router-link to="/filter/today" class="case">
-          <div class="case-top"><img src="/img/clock.svg" class="icone"><b>{{ countToday() }}</b></div>
+          <div class="case-top"><img src="/img/ic-clock.svg" alt=""><b>{{ countToday() }}</b></div>
           <p>Today</p>
         </router-link>
         <router-link to="/filter/all" class="case">
-          <div class="case-top"><img src="/img/inbox.svg" class="icone"><b>{{ tasks.length }}</b></div>
+          <div class="case-top"><img src="/img/ic-inbox.svg" alt=""><b>{{ tasks.length }}</b></div>
           <p>All</p>
         </router-link>
       </div>
@@ -28,26 +28,29 @@
       <h3>My Lists</h3>
       <div class="mes-listes">
         <router-link v-for="list in lists" :key="list.id" :to="'/list/' + list.id" class="une-liste" :class="{ selected: currentListId == list.id }">
-          <span class="rond" :style="{ backgroundColor: list.color }"></span>
-          <span>{{ list.name }}</span>
-          <span class="nb">{{ countTasksOfList(list.id) }}</span>
+          <span class="rond" :style="{ backgroundColor: list.color }"><img src="/img/list-icon.svg" alt=""></span>
+          <span class="nom">{{ list.name }}</span>
+          <span class="nb">{{ countTasksOfList(list.id) }} to do</span>
         </router-link>
       </div>
 
       <div class="add-list" v-if="showAddList == false">
-        <a href="#" @click="showAddList = true">+ Add a list</a>
+        <a href="#" @click.prevent="showAddList = true">+ Add a list</a>
       </div>
-      <div class="add-list" v-else>
+      <div class="add-list ouvert" v-else>
         <input type="text" v-model="newListName" placeholder="Name of the list">
-        <select v-model="newListColor">
-          <option value="#e74c3c">Red</option>
-          <option value="#3498db">Blue</option>
-          <option value="#2ecc71">Green</option>
-          <option value="#f39c12">Orange</option>
-          <option value="#9b59b6">Purple</option>
-        </select>
-        <button class="btn-small" @click="addList()">Add</button>
-        <button class="btn-small grey" @click="showAddList = false">Cancel</button>
+        <div class="add-list-bas">
+          <select v-model="newListColor">
+            <option value="#e74c3c">Red</option>
+            <option value="#3498db">Blue</option>
+            <option value="#2ecc71">Green</option>
+            <option value="#f39c12">Orange</option>
+            <option value="#9b59b6">Purple</option>
+            <option value="#1d2b6b">Navy</option>
+          </select>
+          <button class="pill" @click="addList()">Add</button>
+          <button class="pill gris" @click="showAddList = false">Cancel</button>
+        </div>
       </div>
     </aside>
 

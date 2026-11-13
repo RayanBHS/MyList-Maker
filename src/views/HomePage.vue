@@ -1,39 +1,42 @@
 <template>
   <div>
     <h1>Home</h1>
-    <p class="hello">Hello {{ currentUser }} !</p>
     <div class="home-grid">
-      <div class="bloc">
+      <section class="home-gauche">
         <h4>Next Tasks</h4>
         <p v-if="getNextTasks().length == 0" class="vide">Nothing to do, nice !</p>
         <div v-for="task in getNextTasks()" :key="task.id" class="task" @click="$emit('open-task', task)">
-          <input type="checkbox" :checked="task.status == 'done'" @click.stop="$emit('check-task', task)">
+          <button class="check" :class="{ coche: task.status == 'done' }" @click.stop="$emit('check-task', task)"></button>
           <div class="task-text">
-            <span>{{ task.title }}</span>
-            <span class="date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            <span class="lieu" v-if="task.location != ''"><img src="/img/pin.svg" class="mini-icone"> {{ task.location }}</span>
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <span class="pastille" :style="{ backgroundColor: getListColor(lists, task.listId) }"></span>
+          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
         </div>
-      </div>
-      <div class="bloc">
+      </section>
+
+      <section class="home-droite">
         <h4>Flagged</h4>
         <p v-if="getFlaggedTasks(tasks).length == 0" class="vide">No flagged task</p>
         <div v-for="task in getFlaggedTasks(tasks)" :key="task.id" class="task" @click="$emit('open-task', task)">
-          <input type="checkbox" :checked="task.status == 'done'" @click.stop="$emit('check-task', task)">
+          <button class="check" :class="{ coche: task.status == 'done' }" @click.stop="$emit('check-task', task)"></button>
           <div class="task-text">
-            <span>{{ task.title }}</span>
-            <span class="lieu" v-if="task.location != ''"><img src="/img/pin.svg" class="mini-icone"> {{ task.location }}</span>
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img src="/img/flag.svg" class="icone">
+          <img src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
         </div>
 
         <h4 class="titre-map">Location</h4>
-        <div class="map-construction petite">
+        <router-link to="/map" class="map-construction petite">
           <img src="/img/pin.svg" alt="">
           <p>Map in construction</p>
-        </div>
-      </div>
+        </router-link>
+      </section>
     </div>
   </div>
 </template>

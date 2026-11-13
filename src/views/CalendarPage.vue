@@ -2,10 +2,10 @@
   <div>
     <div class="titre-liste">
       <h1>Calendar</h1>
-      <div>
-        <button class="btn-small grey" @click="previousMonth()">&lt;</button>
+      <div class="mois-nav">
+        <button class="bouton-rond" @click="previousMonth()">&lt;</button>
         <b class="mois">{{ monthNames[month] }} {{ year }}</b>
-        <button class="btn-small grey" @click="nextMonth()">&gt;</button>
+        <button class="bouton-rond" @click="nextMonth()">&gt;</button>
       </div>
     </div>
     <div class="calendrier">
@@ -17,7 +17,7 @@
       <div class="jour-nom">Sat</div>
       <div class="jour-nom">Sun</div>
       <div v-for="(day, index) in getDaysOfMonth()" :key="index" class="jour" :class="{ vide2: day == 0, today: isToday(day) }">
-        <span v-if="day != 0">{{ day }}</span>
+        <span class="num" v-if="day != 0">{{ day }}</span>
         <div v-for="task in getTasksOfDay(day)" :key="task.id" class="mini-task" :style="{ backgroundColor: getListColor(lists, task.listId) }" @click="$emit('open-task', task)">
           {{ task.title }}
         </div>

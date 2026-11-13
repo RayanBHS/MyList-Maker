@@ -12,7 +12,10 @@ export function dateToString(d) {
 
 export function formatDate(date) {
   let parts = date.split('-')
-  return parts[2] + '/' + parts[1] + '/' + parts[0]
+  let d = new Date(parts[0], parts[1] - 1, parts[2])
+  let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+  return days[d.getDay()] + '. ' + d.getDate() + ' ' + months[d.getMonth()]
 }
 
 export function getListName(lists, id) {

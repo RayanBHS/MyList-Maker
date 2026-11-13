@@ -1,76 +1,84 @@
 <template>
   <div>
     <div class="titre-liste">
-      <h1 :style="{ color: getListColor(lists, currentListId) }">{{ getListName(lists, currentListId) }}</h1>
-      <button class="btn-small grey" @click="$emit('delete-list', currentListId)">Delete list</button>
+      <h1>{{ getListName(lists, currentListId) }}</h1>
+      <div class="titre-icones">
+        <span class="rond grand" :style="{ backgroundColor: getListColor(lists, currentListId) }"><img src="/img/list-icon.svg" alt=""></span>
+        <button class="bouton-rond" title="Delete list" @click="$emit('delete-list', currentListId)"><img src="/img/trash.svg" alt="Delete list"></button>
+      </div>
     </div>
 
     <div class="liste-et-detail">
       <div class="colonnes">
-        <div class="colonne">
-          <h4>To Do</h4>
-          <div v-for="task in getTasksByStatus('todo')" :key="task.id" class="task" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
-            <input type="checkbox" @click.stop="$emit('check-task', task)">
-            <div class="task-text">
-              <span>{{ task.title }}</span>
-              <span class="date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            </div>
-            <img v-if="task.flagged" src="/img/flag.svg" class="icone">
+        <h4>To Do</h4>
+        <p v-if="getTasksByStatus('todo').length == 0" class="vide">Nothing here</p>
+        <div v-for="task in getTasksByStatus('todo')" :key="task.id" class="task" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
+          <button class="check" @click.stop="$emit('check-task', task)"></button>
+          <div class="task-text">
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-        </div>
-        <div class="colonne">
-          <h4>Doing</h4>
-          <div v-for="task in getTasksByStatus('doing')" :key="task.id" class="task" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
-            <input type="checkbox" @click.stop="$emit('check-task', task)">
-            <div class="task-text">
-              <span>{{ task.title }}</span>
-              <span class="date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            </div>
-            <img v-if="task.flagged" src="/img/flag.svg" class="icone">
-          </div>
-        </div>
-        <div class="colonne">
-          <h4>Done</h4>
-          <div v-for="task in getTasksByStatus('done')" :key="task.id" class="task done" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
-            <input type="checkbox" checked @click.stop="$emit('check-task', task)">
-            <div class="task-text">
-              <span>{{ task.title }}</span>
-            </div>
-          </div>
+          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
         </div>
 
-        <div class="ajout-tache">
-          <input type="text" v-model="newTaskTitle" placeholder="New task...">
-          <button class="btn-small" @click="addTask()">+ Add</button>
+        <h4>Doing</h4>
+        <p v-if="getTasksByStatus('doing').length == 0" class="vide">Nothing here</p>
+        <div v-for="task in getTasksByStatus('doing')" :key="task.id" class="task" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
+          <button class="check" @click.stop="$emit('check-task', task)"></button>
+          <div class="task-text">
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
+          </div>
+          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
         </div>
+
+        <h4>Done</h4>
+        <p v-if="getTasksByStatus('done').length == 0" class="vide">Nothing here</p>
+        <div v-for="task in getTasksByStatus('done')" :key="task.id" class="task done" :class="{ selected: isSelected(task) }" @click="$emit('open-task', task)">
+          <button class="check coche" @click.stop="$emit('check-task', task)"></button>
+          <div class="task-text">
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
+          </div>
+          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+        </div>
+
+        <form class="ajout-tache" @submit.prevent="addTask()">
+          <input type="text" v-model="newTaskTitle" placeholder="+ New task">
+          <button type="submit" class="pill">Add</button>
+        </form>
       </div>
 
       <div class="detail" v-if="currentTask != null && currentTask.listId == currentListId">
         <div class="detail-top">
-          <input class="detail-titre" type="text" v-model="currentTask.title">
-          <img v-if="currentTask.flagged" src="/img/flag.svg" class="flag-btn" @click="toggleFlag()">
-          <img v-else src="/img/flag-empty.svg" class="flag-btn" @click="toggleFlag()">
+          <input class="detail-titre" type="text" v-model="currentTask.title" @change="$emit('save-task', currentTask)">
+          <img v-if="currentTask.flagged" src="/img/ic-flag.svg" class="flag-btn" alt="Remove flag" @click="toggleFlag()">
+          <img v-else src="/img/flag-empty.svg" class="flag-btn" alt="Add flag" @click="toggleFlag()">
+          <img src="/img/close.svg" class="flag-btn" alt="Close" @click="$emit('close-task')">
         </div>
 
-        <label>Description</label>
-        <textarea v-model="currentTask.description" placeholder="Add a description"></textarea>
+        <input class="detail-date" type="date" v-model="currentTask.date" @change="$emit('save-task', currentTask)">
 
-        <label>Date</label>
-        <input type="date" v-model="currentTask.date">
+        <textarea v-model="currentTask.description" placeholder="Add a description" @change="$emit('save-task', currentTask)"></textarea>
 
-        <label>Location</label>
-        <input type="text" v-model="currentTask.location" placeholder="ex: Concordia University">
+        <router-link to="/map" class="map-construction detail-map" v-if="currentTask.location != ''">
+          <img src="/img/pin.svg" alt="">
+          <p>Map in construction</p>
+        </router-link>
 
-        <label>Status</label>
-        <div class="status-btns">
-          <button :class="{ actif: currentTask.status == 'todo' }" @click="changeStatus('todo')">To Do</button>
-          <button :class="{ actif: currentTask.status == 'doing' }" @click="changeStatus('doing')">Doing</button>
-          <button :class="{ actif: currentTask.status == 'done' }" @click="changeStatus('done')">Done</button>
-        </div>
+        <label class="detail-lieu">
+          Location :
+          <input type="text" v-model="currentTask.location" placeholder="add a location" @change="$emit('save-task', currentTask)">
+        </label>
 
         <div class="detail-bas">
-          <button class="btn-small red" @click="$emit('delete-task', currentTask)">Delete</button>
-          <button class="btn-small grey" @click="$emit('close-task')">Close</button>
+          <button class="pill" :class="{ actif: currentTask.status == 'todo' }" @click="changeStatus('todo')">To Do</button>
+          <button class="pill" :class="{ actif: currentTask.status == 'doing' }" @click="changeStatus('doing')">Doing</button>
+          <button class="pill" :class="{ actif: currentTask.status == 'done' }" @click="changeStatus('done')">Done</button>
+          <button class="bouton-rond petit" title="Delete task" @click="$emit('delete-task', currentTask)"><img src="/img/trash.svg" alt="Delete task"></button>
         </div>
       </div>
     </div>
@@ -82,7 +90,7 @@ import { formatDate, getListName, getListColor } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentListId', 'currentTask'],
-  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task'],
+  emits: ['open-task', 'check-task', 'add-task', 'delete-task', 'delete-list', 'close-task', 'save-task'],
 
   data() {
     return {
@@ -122,6 +130,7 @@ export default {
 
     changeStatus(status) {
       this.currentTask.status = status
+      this.$emit('save-task', this.currentTask)
     },
 
     toggleFlag() {
@@ -130,6 +139,7 @@ export default {
       } else {
         this.currentTask.flagged = true
       }
+      this.$emit('save-task', this.currentTask)
     }
   }
 }

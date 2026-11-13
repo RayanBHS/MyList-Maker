@@ -1,9 +1,13 @@
 <template>
   <div>
     <h1>Settings</h1>
-    <div class="bloc">
-      <p>Logged as : <b>{{ currentUser }}</b></p>
-      <button class="btn" @click="$emit('logout')">Log out</button>
+    <div class="bloc reglages">
+      <img src="/img/logo.png" alt="">
+      <div>
+        <p class="reglages-label">Logged as</p>
+        <p class="reglages-nom">{{ currentUser }}</p>
+      </div>
+      <button class="connect petit" @click="$emit('logout')">Log out</button>
     </div>
   </div>
 </template>
