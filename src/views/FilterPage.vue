@@ -10,7 +10,7 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-        <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+        <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
         <span class="tag" :style="{ backgroundColor: getListColor(lists, task.listId) }">{{ getListName(lists, task.listId) }}</span>
       </div>
     </div>

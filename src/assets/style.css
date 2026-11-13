@@ -233,6 +233,7 @@ input, select, textarea {
 
 .main {
   flex: 1;
+  min-width: 0;
   padding: 24px 30px;
   overflow-y: auto;
 }
@@ -280,8 +281,8 @@ input, select, textarea {
 }
 
 .case-top img {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 }
 
 .case-top b {
@@ -414,8 +415,8 @@ input, select, textarea {
 }
 
 .menu-bas img {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   display: block;
 }
 
@@ -538,46 +539,32 @@ input, select, textarea {
   margin-top: 16px;
 }
 
-.map-construction {
+.carte {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
   background-color: #e8ebf3;
-  border: 2px dashed #b4bbd0;
   border-radius: 16px;
-  color: #6b7186;
-  padding: 20px;
+  overflow: hidden;
 }
 
-.map-construction img {
-  width: 36px;
-  opacity: 0.5;
+.carte iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
-.map-construction p {
-  margin: 6px 0px 0px 0px;
-  font-size: 13px;
-}
-
-.map-construction h2 {
-  color: #1d2b4a;
-  margin: 10px 0px 4px 0px;
-}
-
-.map-construction.petite {
+.carte.petite {
   height: 220px;
 }
 
-.map-construction.grande {
+.carte.grande {
   flex: 1;
+  min-width: 0;
   height: calc(100vh - 140px);
 }
 
-.map-construction.detail-map {
-  height: 130px;
+.carte.detail-map {
+  height: 150px;
   margin: 14px 20px 6px 20px;
 }
 
@@ -591,6 +578,7 @@ input, select, textarea {
   font-weight: 700;
   padding: 6px 18px;
   border-radius: 24px;
+  z-index: 1;
 }
 
 .titre-liste {
@@ -634,6 +622,7 @@ input, select, textarea {
 
 .detail {
   flex: 1;
+  min-width: 0;
   background-color: #ffffff;
   border: 1px solid #828284;
   border-radius: 18px;
@@ -650,6 +639,7 @@ input, select, textarea {
 
 .detail-titre {
   flex: 1;
+  min-width: 0;
   font-size: 26px;
   border: none;
   padding: 0px;
@@ -845,7 +835,7 @@ input, select, textarea {
     width: 100%;
     margin-top: 16px;
   }
-  .map-construction.grande {
+  .carte.grande {
     width: 100%;
     height: 300px;
   }

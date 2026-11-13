@@ -4,35 +4,48 @@
     <div class="page-map">
       <div class="liste-lieux">
         <p v-if="getTasksWithLocation().length == 0" class="vide">No task with a location</p>
-        <div v-for="task in getTasksWithLocation()" :key="task.id" class="task" :class="{ selected: mapSearch == task.location }" @click="mapSearch = task.location">
+        <div v-for="task in getTasksWithLocation()" :key="task.id" class="task" :class="{ selected: getSelectedTask() == task }" @click="mapTask = task">
           <div class="task-text">
             <span class="task-titre">{{ task.title }}</span>
             <span class="chip"><img src="/img/gmap-pin.svg" alt=""> {{ task.location }}</span>
           </div>
         </div>
       </div>
-      <div class="map-construction grande">
+      <div class="carte grande">
         <span class="map-titre">Location</span>
-        <img src="/img/pin.svg" alt="">
-        <h2>Map in construction</h2>
-        <p>We are still working on the map, it will show where your tasks are.</p>
-        <p v-if="mapSearch != ''">Selected place : <b>{{ mapSearch }}</b></p>
+        <iframe v-if="getSelectedTask() != null" :src="getMapUrl(getSelectedTask().location)"></iframe>
+        <iframe v-else src="https://maps.google.com/maps?q=Paris&z=11&output=embed"></iframe>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getMapUrl } from '../utils.js'
+
 export default {
   props: ['tasks'],
 
   data() {
     return {
-      mapSearch: ''
+      mapTask: null
     }
   },
 
   methods: {
+    getMapUrl,
+
+    getSelectedTask() {
+      if (this.mapTask != null) {
+        return this.mapTask
+      }
+      let list = this.getTasksWithLocation()
+      if (list.length > 0) {
+        return list[0]
+      }
+      return null
+    },
+
     getTasksWithLocation() {
       let result = []
       for (let i = 0; i < this.tasks.length; i++) {

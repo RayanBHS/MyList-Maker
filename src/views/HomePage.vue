@@ -4,7 +4,7 @@
     <div class="home-grid">
       <section class="home-gauche">
         <h4>Next Tasks</h4>
-        <p v-if="getNextTasks().length == 0" class="vide">Nothing to do, nice !</p>
+        <p v-if="getNextTasks().length == 0" class="vide">Nothing to do</p>
         <div v-for="task in getNextTasks()" :key="task.id" class="task" @click="$emit('open-task', task)">
           <button class="check" :class="{ coche: task.status == 'done' }" @click.stop="$emit('check-task', task)"></button>
           <div class="task-text">
@@ -12,7 +12,7 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
           <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
         </div>
       </section>
@@ -27,22 +27,22 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <img src="/img/flag.svg" class="task-flag" alt="flagged">
           <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
         </div>
 
         <h4 class="titre-map">Location</h4>
-        <router-link to="/map" class="map-construction petite">
-          <img src="/img/pin.svg" alt="">
-          <p>Map in construction</p>
-        </router-link>
+        <p v-if="getFirstPlace() == ''" class="vide">No task with a location</p>
+        <div v-else class="carte petite">
+          <iframe :src="getMapUrl(getFirstPlace())"></iframe>
+        </div>
       </section>
     </div>
   </div>
 </template>
 
 <script>
-import { formatDate, getListColor, getFlaggedTasks } from '../utils.js'
+import { formatDate, getListColor, getFlaggedTasks, getMapUrl } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentUser'],
@@ -52,6 +52,17 @@ export default {
     formatDate,
     getListColor,
     getFlaggedTasks,
+    getMapUrl,
+
+    getFirstPlace() {
+      let next = this.getNextTasks()
+      for (let i = 0; i < next.length; i++) {
+        if (next[i].location != '') {
+          return next[i].location
+        }
+      }
+      return ''
+    },
 
     getNextTasks() {
       let withDate = []

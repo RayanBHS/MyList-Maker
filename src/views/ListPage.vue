@@ -19,7 +19,7 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
         </div>
 
         <h4>Doing</h4>
@@ -31,7 +31,7 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
         </div>
 
         <h4>Done</h4>
@@ -43,7 +43,7 @@
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
             <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
           </div>
-          <img v-if="task.flagged" src="/img/ic-flag.svg" class="task-flag" alt="flagged">
+          <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
         </div>
 
         <form class="ajout-tache" @submit.prevent="addTask()">
@@ -55,7 +55,7 @@
       <div class="detail" v-if="currentTask != null && currentTask.listId == currentListId">
         <div class="detail-top">
           <input class="detail-titre" type="text" v-model="currentTask.title" @change="$emit('save-task', currentTask)">
-          <img v-if="currentTask.flagged" src="/img/ic-flag.svg" class="flag-btn" alt="Remove flag" @click="toggleFlag()">
+          <img v-if="currentTask.flagged" src="/img/flag.svg" class="flag-btn" alt="Remove flag" @click="toggleFlag()">
           <img v-else src="/img/flag-empty.svg" class="flag-btn" alt="Add flag" @click="toggleFlag()">
           <img src="/img/close.svg" class="flag-btn" alt="Close" @click="$emit('close-task')">
         </div>
@@ -64,10 +64,9 @@
 
         <textarea v-model="currentTask.description" placeholder="Add a description" @change="$emit('save-task', currentTask)"></textarea>
 
-        <router-link to="/map" class="map-construction detail-map" v-if="currentTask.location != ''">
-          <img src="/img/pin.svg" alt="">
-          <p>Map in construction</p>
-        </router-link>
+        <div class="carte detail-map" v-if="currentTask.location != ''">
+          <iframe :src="getMapUrl(currentTask.location)"></iframe>
+        </div>
 
         <label class="detail-lieu">
           Location :
@@ -86,7 +85,7 @@
 </template>
 
 <script>
-import { formatDate, getListName, getListColor } from '../utils.js'
+import { formatDate, getListName, getListColor, getMapUrl } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks', 'currentListId', 'currentTask'],
@@ -102,6 +101,7 @@ export default {
     formatDate,
     getListName,
     getListColor,
+    getMapUrl,
 
     getTasksByStatus(status) {
       let result = []
