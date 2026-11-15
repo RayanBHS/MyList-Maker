@@ -10,7 +10,7 @@
           <div class="task-text">
             <span class="task-titre">{{ task.title }}</span>
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.png" alt=""> Go to {{ task.location }}</span>
           </div>
           <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
           <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
@@ -25,7 +25,7 @@
           <div class="task-text">
             <span class="task-titre">{{ task.title }}</span>
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.png" alt=""> Go to {{ task.location }}</span>
           </div>
           <img src="/img/flag.svg" class="task-flag" alt="flagged">
           <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>

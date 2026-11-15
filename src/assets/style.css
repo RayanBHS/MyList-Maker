@@ -37,6 +37,10 @@ input, select, textarea {
   font-size: 14px;
 }
 
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #96a0bb;
+}
+
 .chargement {
   height: 100vh;
   display: flex;
@@ -223,7 +227,7 @@ input, select, textarea {
 
 .sidebar {
   flex: 1;
-  background-color: #96a0bb;
+  background: linear-gradient(#96a0bb, #5b7bd5);
   border-radius: 24px;
   padding: 16px 12px;
   display: flex;
@@ -268,10 +272,15 @@ input, select, textarea {
   border-radius: 16px;
   padding: 8px 12px 6px 10px;
   margin-bottom: 8px;
+  transition: background-color 0.2s;
 }
 
 .case:hover {
   background-color: #f3f3f8;
+}
+
+.case.router-link-active {
+  background-color: #d9e3ef;
 }
 
 .case-top {
@@ -314,6 +323,7 @@ input, select, textarea {
   margin-top: 4px;
   border-radius: 12px;
   color: #e4e8f1;
+  transition: background-color 0.2s;
 }
 
 .une-liste:hover {
@@ -409,7 +419,7 @@ input, select, textarea {
   justify-content: space-around;
   align-items: center;
   margin-top: 10px;
-  background-color: #96a0bb;
+  background-color: #5b7bd5;
   border-radius: 24px;
   height: 64px;
 }
@@ -445,6 +455,7 @@ input, select, textarea {
   padding: 9px 12px 9px 10px;
   margin-bottom: 6px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .task:hover {
@@ -505,7 +516,7 @@ input, select, textarea {
   display: flex;
   align-items: center;
   background-color: #ffffff;
-  border-radius: 6px;
+  border-radius: 999px;
   padding: 4px 8px;
   margin-top: 6px;
   font-size: 11px;
@@ -598,8 +609,8 @@ input, select, textarea {
 }
 
 .colonnes {
-  width: 46%;
-  margin-right: 24px;
+  flex: 1;
+  min-width: 0;
 }
 
 .colonnes h4:first-child {
@@ -621,8 +632,8 @@ input, select, textarea {
 }
 
 .detail {
-  flex: 1;
-  min-width: 0;
+  width: 50%;
+  margin-left: 24px;
   background-color: #ffffff;
   border: 1px solid #828284;
   border-radius: 18px;
@@ -704,69 +715,18 @@ input, select, textarea {
   margin-left: auto;
 }
 
-.filtre-liste {
-  width: 60%;
+.liste-taches {
+  width: 100%;
 }
 
-.mois-nav {
-  display: flex;
-  align-items: center;
+.liste-taches h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 18px;
 }
 
-.mois {
-  font-size: 18px;
-  margin: 0px 14px;
-}
-
-.calendrier {
-  display: flex;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.jour-nom {
-  width: 14.28%;
-  text-align: center;
-  font-size: 13px;
-  color: #a09fa4;
-  margin-bottom: 6px;
-}
-
-.jour {
-  width: 13.5%;
-  margin: 0.39%;
-  min-height: 96px;
-  background-color: #efefef;
-  border-radius: 14px;
-  padding: 8px;
-}
-
-.jour.vide2 {
-  background-color: transparent;
-}
-
-.jour.today {
-  background-color: #d9e3ef;
-}
-
-.jour .num {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.jour.today .num {
+.liste-taches h4.today {
   color: #e8403a;
-}
-
-.mini-task {
-  color: white;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 6px;
-  margin-top: 4px;
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .page-map {
@@ -788,7 +748,6 @@ input, select, textarea {
 .reglages {
   display: flex;
   align-items: center;
-  max-width: 560px;
 }
 
 .reglages img {
@@ -827,12 +786,13 @@ input, select, textarea {
   .home-grid, .liste-et-detail, .page-map {
     flex-direction: column;
   }
-  .home-gauche, .colonnes, .filtre-liste, .liste-lieux {
+  .home-gauche, .colonnes, .liste-lieux {
     width: 100%;
     margin-right: 0px;
   }
   .detail {
     width: 100%;
+    margin-left: 0px;
     margin-top: 16px;
   }
   .carte.grande {
@@ -845,12 +805,5 @@ input, select, textarea {
   .connect {
     width: 150px;
     font-size: 22px;
-  }
-  .jour {
-    min-height: 60px;
-    padding: 4px;
-  }
-  .mini-task {
-    font-size: 9px;
   }
 }

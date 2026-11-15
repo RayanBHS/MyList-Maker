@@ -7,7 +7,7 @@
         <div v-for="task in getTasksWithLocation()" :key="task.id" class="task" :class="{ selected: getSelectedTask() == task }" @click="mapTask = task">
           <div class="task-text">
             <span class="task-titre">{{ task.title }}</span>
-            <span class="chip"><img src="/img/gmap-pin.svg" alt=""> {{ task.location }}</span>
+            <span class="chip"><img src="/img/gmap-pin.png" alt=""> {{ task.location }}</span>
           </div>
         </div>
       </div>

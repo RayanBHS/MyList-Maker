@@ -1,25 +1,17 @@
 <template>
   <div>
-    <div class="titre-liste">
-      <h1>Calendar</h1>
-      <div class="mois-nav">
-        <button class="bouton-rond" @click="previousMonth()">&lt;</button>
-        <b class="mois">{{ monthNames[month] }} {{ year }}</b>
-        <button class="bouton-rond" @click="nextMonth()">&gt;</button>
-      </div>
-    </div>
-    <div class="calendrier">
-      <div class="jour-nom">Mon</div>
-      <div class="jour-nom">Tue</div>
-      <div class="jour-nom">Wed</div>
-      <div class="jour-nom">Thu</div>
-      <div class="jour-nom">Fri</div>
-      <div class="jour-nom">Sat</div>
-      <div class="jour-nom">Sun</div>
-      <div v-for="(day, index) in getDaysOfMonth()" :key="index" class="jour" :class="{ vide2: day == 0, today: isToday(day) }">
-        <span class="num" v-if="day != 0">{{ day }}</span>
-        <div v-for="task in getTasksOfDay(day)" :key="task.id" class="mini-task" :style="{ backgroundColor: getListColor(lists, task.listId) }" @click="$emit('open-task', task)">
-          {{ task.title }}
+    <h1>Calendar</h1>
+    <p v-if="getDates().length == 0" class="vide">No task with a date</p>
+    <div class="liste-taches">
+      <div v-for="date in getDates()" :key="date">
+        <h4 :class="{ today: date == today }">{{ formatDate(date) }}</h4>
+        <div v-for="task in getTasksOfDate(date)" :key="task.id" class="task" :class="{ done: task.status == 'done' }" @click="$emit('open-task', task)">
+          <div class="task-text">
+            <span class="task-titre">{{ task.title }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.png" alt=""> Go to {{ task.location }}</span>
+          </div>
+          <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
+          <span class="rond" :style="{ backgroundColor: getListColor(lists, task.listId) }"><img src="/img/list-icon.svg" alt=""></span>
         </div>
       </div>
     </div>
@@ -27,7 +19,7 @@
 </template>
 
 <script>
-import { dateToString, getListColor } from '../utils.js'
+import { dateToString, formatDate, getListColor } from '../utils.js'
 
 export default {
   props: ['lists', 'tasks'],
@@ -35,67 +27,34 @@ export default {
 
   data() {
     return {
-      month: new Date().getMonth(),
-      year: new Date().getFullYear(),
-      monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      today: dateToString(new Date())
     }
   },
 
   methods: {
+    formatDate,
     getListColor,
 
-    getDaysOfMonth() {
-      let days = []
-      let firstDay = new Date(this.year, this.month, 1).getDay()
-      if (firstDay == 0) {
-        firstDay = 7
+    getDates() {
+      let dates = []
+      for (let i = 0; i < this.tasks.length; i++) {
+        let date = this.tasks[i].date
+        if (date != '' && dates.includes(date) == false) {
+          dates.push(date)
+        }
       }
-      for (let i = 1; i < firstDay; i++) {
-        days.push(0)
-      }
-      let nbDays = new Date(this.year, this.month + 1, 0).getDate()
-      for (let i = 1; i <= nbDays; i++) {
-        days.push(i)
-      }
-      return days
+      dates.sort()
+      return dates
     },
 
-    getTasksOfDay(day) {
+    getTasksOfDate(date) {
       let result = []
-      if (day == 0) {
-        return result
-      }
-      let date = dateToString(new Date(this.year, this.month, day))
       for (let i = 0; i < this.tasks.length; i++) {
         if (this.tasks[i].date == date) {
           result.push(this.tasks[i])
         }
       }
       return result
-    },
-
-    isToday(day) {
-      let d = new Date()
-      if (day == d.getDate() && this.month == d.getMonth() && this.year == d.getFullYear()) {
-        return true
-      }
-      return false
-    },
-
-    previousMonth() {
-      this.month = this.month - 1
-      if (this.month < 0) {
-        this.month = 11
-        this.year = this.year - 1
-      }
-    },
-
-    nextMonth() {
-      this.month = this.month + 1
-      if (this.month > 11) {
-        this.month = 0
-        this.year = this.year + 1
-      }
     }
   }
 }

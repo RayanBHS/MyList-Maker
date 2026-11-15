@@ -2,13 +2,13 @@
   <div>
     <h1>{{ getTitle() }}</h1>
     <p v-if="getFilteredTasks().length == 0" class="vide">No task here</p>
-    <div class="filtre-liste">
+    <div class="liste-taches">
       <div v-for="task in getFilteredTasks()" :key="task.id" class="task" @click="$emit('open-task', task)">
         <button class="check" :class="{ coche: task.status == 'done' }" @click.stop="$emit('check-task', task)"></button>
           <div class="task-text">
             <span class="task-titre">{{ task.title }}</span>
             <span class="task-date" v-if="task.date != ''">{{ formatDate(task.date) }}</span>
-            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.svg" alt=""> Go to {{ task.location }}</span>
+            <span class="chip" v-if="task.location != ''"><img src="/img/gmap-pin.png" alt=""> Go to {{ task.location }}</span>
           </div>
         <img v-if="task.flagged" src="/img/flag.svg" class="task-flag" alt="flagged">
         <span class="tag" :style="{ backgroundColor: getListColor(lists, task.listId) }">{{ getListName(lists, task.listId) }}</span>
