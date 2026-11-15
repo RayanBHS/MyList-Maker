@@ -8,15 +8,15 @@
 
       <div class="cases">
         <router-link to="/filter/scheduled" class="case">
-          <div class="case-top"><img src="/img/ic-calendar.svg" alt=""><b>{{ countScheduled() }}</b></div>
+          <div class="case-top"><img src="/img/ic-calendar.svg" alt=""><b>{{ scheduledCount }}</b></div>
           <p>Scheduled</p>
         </router-link>
         <router-link to="/filter/flagged" class="case">
-          <div class="case-top"><img src="/img/ic-flag.svg" alt=""><b>{{ countFlagged() }}</b></div>
+          <div class="case-top"><img src="/img/ic-flag.svg" alt=""><b>{{ flaggedCount }}</b></div>
           <p>Flagged</p>
         </router-link>
         <router-link to="/filter/today" class="case">
-          <div class="case-top"><img src="/img/ic-clock.svg" alt=""><b>{{ countToday() }}</b></div>
+          <div class="case-top"><img src="/img/ic-clock.svg" alt=""><b>{{ todayCount }}</b></div>
           <p>Today</p>
         </router-link>
         <router-link to="/filter/all" class="case">
@@ -38,7 +38,8 @@
         <a href="#" @click.prevent="showAddList = true">+ Add a list</a>
       </div>
       <div class="add-list ouvert" v-else>
-        <input type="text" v-model="newListName" placeholder="Name of the list">
+        <p v-if="errorMessage" class="sidebar-erreur">{{ errorMessage }}</p>
+        <input type="text" v-model="newListName" placeholder="Name of the list" @input="errorMessage = ''">
         <div class="add-list-bas">
           <select v-model="newListColor">
             <option value="#e74c3c">Red</option>
@@ -49,7 +50,7 @@
             <option value="#1d2b6b">Navy</option>
           </select>
           <button class="pill" @click="addList()">Add</button>
-          <button class="pill gris" @click="showAddList = false">Cancel</button>
+          <button class="pill gris" @click="cancelAddList()">Cancel</button>
         </div>
       </div>
     </aside>
@@ -86,23 +87,26 @@ export default {
     return {
       showAddList: false,
       newListName: '',
-      newListColor: '#3498db'
+      newListColor: '#3498db',
+      errorMessage: ''
+    }
+  },
+
+  computed: {
+    scheduledCount() {
+      return getScheduledTasks(this.tasks).length
+    },
+
+    flaggedCount() {
+      return getFlaggedTasks(this.tasks).length
+    },
+
+    todayCount() {
+      return getTodayTasks(this.tasks).length
     }
   },
 
   methods: {
-    countScheduled() {
-      return getScheduledTasks(this.tasks).length
-    },
-
-    countFlagged() {
-      return getFlaggedTasks(this.tasks).length
-    },
-
-    countToday() {
-      return getTodayTasks(this.tasks).length
-    },
-
     countTasksOfList(id) {
       let nb = 0
       for (let i = 0; i < this.tasks.length; i++) {
@@ -114,13 +118,20 @@ export default {
     },
 
     addList() {
-      if (this.newListName == '') {
-        alert('Give a name to your list')
+      if (this.newListName.trim() == '') {
+        this.errorMessage = 'Give a name to your list'
         return
       }
-      this.$emit('add-list', this.newListName, this.newListColor)
+      this.errorMessage = ''
+      this.$emit('add-list', this.newListName.trim(), this.newListColor)
       this.newListName = ''
       this.showAddList = false
+    },
+
+    cancelAddList() {
+      this.showAddList = false
+      this.newListName = ''
+      this.errorMessage = ''
     }
   }
 }

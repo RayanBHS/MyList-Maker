@@ -1,4 +1,9 @@
 <template>
+  <div v-if="errorMessage" class="message-erreur app-top-erreur">
+    <span>{{ errorMessage }}</span>
+    <button class="fermer-erreur" @click="errorMessage = ''">&times;</button>
+  </div>
+
   <div v-if="loading" class="chargement">Loading...</div>
 
   <LoginPage v-else-if="isLogged == false" @logged="onLogged" />
@@ -25,10 +30,22 @@
           @save-task="saveTask"
           @delete-task="deleteTask"
           @delete-list="deleteList"
+          @edit-list="editList"
           @close-task="currentTask = null"
           @logout="logout"
       />
     </main>
+
+    <!-- Modal confirmation suppression liste -->
+    <div v-if="listToDelete != null" class="modal-backdrop" @click.self="listToDelete = null">
+      <div class="modal-contenu">
+        <p>Delete this list and all its tasks ?</p>
+        <div class="modal-actions">
+          <button class="pill gris" @click="listToDelete = null">Cancel</button>
+          <button class="pill danger" @click="confirmDeleteList">Delete</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,7 +68,9 @@ export default {
       currentUser: '',
       currentTask: null,
       lists: [],
-      tasks: []
+      tasks: [],
+      errorMessage: '',
+      listToDelete: null
     }
   },
 
@@ -109,7 +128,7 @@ export default {
         this.resetSession()
         return
       }
-      alert(e.message)
+      this.errorMessage = e.message
       try {
         await this.loadData()
       } catch (e2) {
@@ -124,6 +143,8 @@ export default {
       this.currentTask = null
       this.lists = []
       this.tasks = []
+      this.errorMessage = ''
+      this.listToDelete = null
     },
 
     async onLogged(username) {
@@ -133,7 +154,7 @@ export default {
         this.isLogged = true
       } catch (e) {
         this.resetSession()
-        alert(e.message)
+        this.errorMessage = e.message
       }
     },
 
@@ -153,10 +174,15 @@ export default {
       }
     },
 
-    async deleteList(id) {
-      if (confirm('Delete this list and all its tasks ?') == false) {
-        return
-      }
+    deleteList(id) {
+      this.listToDelete = id
+    },
+
+    async confirmDeleteList() {
+      let id = this.listToDelete
+      this.listToDelete = null
+      if (!id) return
+
       try {
         await api.deleteList(id)
       } catch (e) {
@@ -181,6 +207,21 @@ export default {
       this.$router.push('/')
     },
 
+    async editList(id, name, color) {
+      try {
+        let updated = await api.updateList(id, name, color)
+        for (let i = 0; i < this.lists.length; i++) {
+          if (this.lists[i].id == id) {
+            this.lists[i].name = updated.name
+            this.lists[i].color = updated.color
+            break
+          }
+        }
+      } catch (e) {
+        this.onError(e)
+      }
+    },
+
     async addTask(title) {
       try {
         let task = await api.createTask(this.currentListId, title)
@@ -196,6 +237,12 @@ export default {
         await api.updateTask(task)
       } catch (e) {
         this.onError(e)
+        return
+      }
+      for (let i = 0; i < this.tasks.length; i++) {
+        if (this.tasks[i].id == task.id) {
+          Object.assign(this.tasks[i], task)
+        }
       }
     },
 

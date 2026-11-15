@@ -13,7 +13,8 @@ const routes = [
   { path: '/filter/:filter', name: 'filter', component: FilterPage },
   { path: '/calendar', name: 'calendar', component: CalendarPage },
   { path: '/map', name: 'map', component: MapPage },
-  { path: '/settings', name: 'settings', component: SettingsPage }
+  { path: '/settings', name: 'settings', component: SettingsPage },
+  { path: '/:pathMatch(.*)*', redirect: '/' }
 ]
 
 const router = createRouter({

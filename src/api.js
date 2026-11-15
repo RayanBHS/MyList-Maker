@@ -83,6 +83,10 @@ export function createList(name, color) {
   return request('POST', '/lists', { name: name, color: color })
 }
 
+export function updateList(id, name, color) {
+  return request('PUT', '/lists/' + id, { name: name, color: color })
+}
+
 export function deleteList(id) {
   return request('DELETE', '/lists/' + id)
 }

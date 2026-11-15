@@ -601,6 +601,125 @@ input:focus, select:focus, textarea:focus {
 .titre-icones {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.message-erreur {
+  background-color: #fee2e2;
+  border: 1px solid #f87171;
+  color: #991b1b;
+  padding: 10px 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.app-top-erreur {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: 600px;
+  width: calc(100% - 32px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fermer-erreur {
+  background: none;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: bold;
+  color: #991b1b;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.sidebar-erreur {
+  color: #ffffff;
+  background-color: #c0262d;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin: 0 0 8px 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-contenu {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 24px 28px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-contenu p {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #111111;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.modal-input {
+  border: none;
+  background-color: #efefef;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 15px;
+}
+
+.modal-select {
+  border: none;
+  background-color: #efefef;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.pill.danger {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.pill.danger:hover {
+  background-color: #c0392b;
+}
+
+.liste-non-trouvee {
+  padding: 20px 0;
 }
 
 .liste-et-detail {
