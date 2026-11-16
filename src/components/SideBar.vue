@@ -8,19 +8,19 @@
 
       <div class="cases">
         <router-link to="/filter/scheduled" class="case">
-          <div class="case-top"><img src="/img/ic-calendar.svg" alt=""><b>{{ scheduledCount }}</b></div>
+          <div class="case-top"><span class="rond rouge"><img src="/img/ic-calendar.svg" alt=""></span><b>{{ scheduledCount }}</b></div>
           <p>Scheduled</p>
         </router-link>
         <router-link to="/filter/flagged" class="case">
-          <div class="case-top"><img src="/img/ic-flag.svg" alt=""><b>{{ flaggedCount }}</b></div>
+          <div class="case-top"><span class="rond orange"><img src="/img/ic-flag.svg" alt=""></span><b>{{ flaggedCount }}</b></div>
           <p>Flagged</p>
         </router-link>
         <router-link to="/filter/today" class="case">
-          <div class="case-top"><img src="/img/ic-clock.svg" alt=""><b>{{ todayCount }}</b></div>
+          <div class="case-top"><span class="rond bleu"><img src="/img/ic-clock.svg" alt=""></span><b>{{ todayCount }}</b></div>
           <p>Today</p>
         </router-link>
         <router-link to="/filter/all" class="case">
-          <div class="case-top"><img src="/img/ic-inbox.svg" alt=""><b>{{ tasks.length }}</b></div>
+          <div class="case-top"><span class="rond gris-fonce"><img src="/img/ic-inbox.svg" alt=""></span><b>{{ tasks.length }}</b></div>
           <p>All</p>
         </router-link>
       </div>
