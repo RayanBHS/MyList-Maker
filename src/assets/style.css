@@ -450,6 +450,10 @@ input:focus, select:focus, textarea:focus {
   display: block;
 }
 
+.bouton-liste {
+  display: none;
+}
+
 .home-grid {
   display: flex;
 }
@@ -915,8 +919,34 @@ input:focus, select:focus, textarea:focus {
     margin-right: 0px;
     margin-left: 0px;
   }
+  .sidebar {
+    display: none;
+  }
+  .sidebar.ouverte {
+    display: flex;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 88px;
+    z-index: 10;
+  }
+  .bouton-liste {
+    display: block;
+    order: 1;
+  }
+  .gauche {
+    padding: 0px;
+  }
+  .menu-bas {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 10;
+  }
   .main {
-    padding: 16px;
+    padding: 16px 16px 100px 16px;
   }
   .detail {
     margin-top: 16px;

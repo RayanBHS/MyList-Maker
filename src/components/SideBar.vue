@@ -1,6 +1,6 @@
 <template>
   <div class="gauche">
-    <aside class="sidebar">
+    <aside class="sidebar" :class="{ ouverte: showSidebar }">
       <div class="logo">
         <img src="/img/logo.png" alt="MyList Maker logo">
         <span>MyList<br>Maker</span>
@@ -56,6 +56,9 @@
     </aside>
 
     <nav class="menu-bas">
+      <a href="#" class="bouton-liste" title="Lists" @click.prevent="showSidebar = !showSidebar">
+        <img src="/img/nav-list.svg" alt="Lists">
+      </a>
       <router-link to="/" title="Home">
         <img v-if="$route.name == 'home'" src="/img/nav-home-bold.svg" alt="Home">
         <img v-else src="/img/nav-home.svg" alt="Home">
@@ -85,10 +88,17 @@ export default {
 
   data() {
     return {
+      showSidebar: false,
       showAddList: false,
       newListName: '',
       newListColor: '#3498db',
       errorMessage: ''
+    }
+  },
+
+  watch: {
+    $route() {
+      this.showSidebar = false
     }
   },
 
