@@ -7,16 +7,17 @@ import authRoutes from './routes/auth.js'
 import listRoutes from './routes/lists.js'
 import taskRoutes from './routes/tasks.js'
 
-const app = express()
+const app = express() // Creating the server called app
 
-app.use(cors()) // le front (localhost:5173) a le droit d'appeler cette API (localhost:3001)
-app.use(bodyParser.json()) // lit le JSON envoyé par le front
+app.use(cors()) // Allow localhost:5173 to call localhost:3001
+app.use(bodyParser.json()) // Allow to easily read the JSON sent by front-end
+
 
 app.use('/api/auth', authRoutes)
 app.use('/api/lists', listRoutes)
 app.use('/api/tasks', taskRoutes)
 
-// erreurs : réponse JSON propre
+// Look for errors like invalid format or duplicate and send back error messages
 app.use((err, req, res, next) => {
   if (err.name == 'SequelizeValidationError') {
     return res.status(400).json({ error: err.errors[0].message })
@@ -28,7 +29,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Server error' })
 })
 
-// on vérifie la connexion à MySQL avant de démarrer
+// Check MySQL connection before going on
 try {
   await sequelize.authenticate()
   console.log('MySQL connected')
@@ -37,6 +38,7 @@ try {
   console.error('Check that MySQL is running, that the database exists (npm run db:seed) and the DB_ values of the .env file.')
   process.exit(1)
 }
+
 
 const port = process.env.PORT || 3001
 app.listen(port, (err) => {

@@ -1,4 +1,5 @@
-// Connexion à MySQL avec Sequelize (ORM)
+// We use Sequelize to configure the connection the database
+
 import 'dotenv/config'
 import { Sequelize } from 'sequelize'
 
@@ -10,7 +11,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
-    logging: false // mettre console.log pour voir les requetes SQL
+    logging: false 
   }
 )
 

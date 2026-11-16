@@ -5,7 +5,7 @@ import { requireAuth } from '../middleware/auth.js'
 const router = Router()
 router.use(requireAuth)
 
-// même forme que les objets du front : { id, listId, title, description, date, location, status, flagged }
+// translate : { id, listId, title, description, date, location, status, flagged }
 function toFront(task) {
   return {
     id: task.id_task,
@@ -49,7 +49,7 @@ router.post('/', async (req, res) => {
   }
   const last = (await Task.max('position', { where: { id_list: listId } })) || 0
   const task = await Task.create({ id_list: listId, title: title, position: last + 1 })
-  await task.reload() // récupère les valeurs par défaut (status, priority...)
+  await task.reload() // get default values that aren't filled here (status, priority...)
   res.status(201).json(toFront(task))
 })
 

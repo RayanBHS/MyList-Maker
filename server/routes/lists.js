@@ -5,16 +5,16 @@ import { requireAuth } from '../middleware/auth.js'
 const router = Router()
 router.use(requireAuth)
 
-// la base utilise id_list / id_user... le front utilise id / name / color
+// the database uses id_list / id_user... while front-end id / name / color so we "translate" it
 function toFront(list) {
   return { id: list.id_list, name: list.name, description: list.description, color: list.color }
 }
 
-// GET /api/lists
-router.get('/', async (req, res) => {
-  const lists = await ToDoList.findAll({ where: { id_user: req.user.id_user }, order: [['id_list', 'ASC']] })
-  res.json(lists.map(toFront))
-})
+  // GET /api/lists
+  router.get('/', async (req, res) => {
+    const lists = await ToDoList.findAll({ where: { id_user: req.user.id_user }, order: [['id_list', 'ASC']] })
+    res.json(lists.map(toFront))
+  })
 
 // POST /api/lists  { name, color, description }
 router.post('/', async (req, res) => {
