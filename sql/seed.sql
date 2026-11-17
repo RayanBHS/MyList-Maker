@@ -1,8 +1,3 @@
--- ============================================================
--- Données d'exemple (les mêmes que dans App.vue)
--- Import direct :  mysql -u root -p mylist_maker < sql/seed.sql
--- Compte de démo : demo / demo1234
--- ============================================================
 USE mylist_maker;
 
 INSERT INTO `user` (id_user, username, email, password_hash) VALUES

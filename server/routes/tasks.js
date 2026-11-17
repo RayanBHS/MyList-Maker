@@ -5,7 +5,6 @@ import { requireAuth } from '../middleware/auth.js'
 const router = Router()
 router.use(requireAuth)
 
-// translate : { id, listId, title, description, date, location, status, flagged }
 function toFront(task) {
   return {
     id: task.id_task,
@@ -20,7 +19,6 @@ function toFront(task) {
   }
 }
 
-// cherche une tâche, seulement si sa liste appartient à l'utilisateur connecté
 function findMyTask(idTask, idUser) {
   return Task.findOne({
     where: { id_task: idTask },
@@ -28,7 +26,6 @@ function findMyTask(idTask, idUser) {
   })
 }
 
-// GET /api/tasks  (toutes les tâches de l'utilisateur)
 router.get('/', async (req, res) => {
   const tasks = await Task.findAll({
     include: { model: ToDoList, attributes: [], where: { id_user: req.user.id_user } },
@@ -37,7 +34,6 @@ router.get('/', async (req, res) => {
   res.json(tasks.map(toFront))
 })
 
-// POST /api/tasks  { listId, title }
 router.post('/', async (req, res) => {
   const { listId, title } = req.body
   if (!listId || !title) {
@@ -49,11 +45,10 @@ router.post('/', async (req, res) => {
   }
   const last = (await Task.max('position', { where: { id_list: listId } })) || 0
   const task = await Task.create({ id_list: listId, title: title, position: last + 1 })
-  await task.reload() // get default values that aren't filled here (status, priority...)
+  await task.reload() // récupère les valeurs par défaut (status, priority...)
   res.status(201).json(toFront(task))
 })
 
-// PUT /api/tasks/:id  { title, description, date, location, status, priority, flagged }
 router.put('/:id', async (req, res) => {
   const b = req.body
   const task = await findMyTask(req.params.id, req.user.id_user)
@@ -87,7 +82,6 @@ router.put('/:id', async (req, res) => {
   res.json(toFront(task))
 })
 
-// DELETE /api/tasks/:id
 router.delete('/:id', async (req, res) => {
   const task = await findMyTask(req.params.id, req.user.id_user)
   if (task == null) {

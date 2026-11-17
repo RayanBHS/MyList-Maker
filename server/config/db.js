@@ -1,5 +1,3 @@
-// We use Sequelize to configure the connection the database
-
 import 'dotenv/config'
 import { Sequelize } from 'sequelize'
 
@@ -12,7 +10,7 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
     timezone: '-05:00',
-    logging: false 
+    logging: false
   }
 )
 

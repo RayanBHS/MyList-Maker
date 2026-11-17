@@ -6,7 +6,6 @@ import { createSession, hashToken, requireAuth } from '../middleware/auth.js'
 
 const router = Router()
 
-// POST /api/auth/register  { username, email, password }
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body
   if (!username || !email || !password) {
@@ -25,7 +24,6 @@ router.post('/register', async (req, res) => {
   res.status(201).json({ token, user: { id: user.id_user, username: user.username } })
 })
 
-// POST /api/auth/login  { username, password }
 router.post('/login', async (req, res) => {
   const { username, password } = req.body
   const user = await User.findOne({ where: { username: username || '' } })
@@ -36,13 +34,11 @@ router.post('/login', async (req, res) => {
   res.json({ token, user: { id: user.id_user, username: user.username } })
 })
 
-// POST /api/auth/logout
 router.post('/logout', requireAuth, async (req, res) => {
   await Session.destroy({ where: { token_hash: hashToken(req.token) } })
   res.json({ ok: true })
 })
 
-// GET /api/auth/me
 router.get('/me', requireAuth, (req, res) => {
   res.json({ id: req.user.id_user, username: req.user.username })
 })

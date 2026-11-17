@@ -5,18 +5,15 @@ import { requireAuth } from '../middleware/auth.js'
 const router = Router()
 router.use(requireAuth)
 
-// the database uses id_list / id_user... while front-end id / name / color so we "translate" it
 function toFront(list) {
   return { id: list.id_list, name: list.name, description: list.description, color: list.color }
 }
 
-  // GET /api/lists
-  router.get('/', async (req, res) => {
-    const lists = await ToDoList.findAll({ where: { id_user: req.user.id_user }, order: [['id_list', 'ASC']] })
-    res.json(lists.map(toFront))
-  })
+router.get('/', async (req, res) => {
+  const lists = await ToDoList.findAll({ where: { id_user: req.user.id_user }, order: [['id_list', 'ASC']] })
+  res.json(lists.map(toFront))
+})
 
-// POST /api/lists  { name, color, description }
 router.post('/', async (req, res) => {
   const { name, color, description } = req.body
   if (!name) {
@@ -31,7 +28,6 @@ router.post('/', async (req, res) => {
   res.status(201).json(toFront(list))
 })
 
-// PUT /api/lists/:id  { name, color, description }
 router.put('/:id', async (req, res) => {
   const list = await ToDoList.findOne({ where: { id_list: req.params.id, id_user: req.user.id_user } })
   if (list == null) {
@@ -46,7 +42,6 @@ router.put('/:id', async (req, res) => {
   res.json(toFront(list))
 })
 
-// DELETE /api/lists/:id  (supprime aussi les tâches : ON DELETE CASCADE)
 router.delete('/:id', async (req, res) => {
   const count = await ToDoList.destroy({ where: { id_list: req.params.id, id_user: req.user.id_user } })
   if (count == 0) {

@@ -1,8 +1,6 @@
-// Les 4 tables du schéma (User, session, TO_DO_LIST, Task) et leurs relations
 import { DataTypes } from 'sequelize'
 import sequelize from '../config/db.js'
 
-// ----- User -----
 export const User = sequelize.define('User', {
   id_user: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
   username: { type: DataTypes.STRING(50), allowNull: false, unique: true },
@@ -14,7 +12,6 @@ export const User = sequelize.define('User', {
   updatedAt: false
 })
 
-// ----- session -----
 export const Session = sequelize.define('Session', {
   id_session: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
   id_user: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
@@ -26,7 +23,6 @@ export const Session = sequelize.define('Session', {
   updatedAt: false
 })
 
-// ----- TO_DO_LIST -----
 export const ToDoList = sequelize.define('ToDoList', {
   id_list: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
   id_user: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
@@ -39,7 +35,6 @@ export const ToDoList = sequelize.define('ToDoList', {
   updatedAt: false
 })
 
-// ----- Task -----
 export const Task = sequelize.define('Task', {
   id_task: { type: DataTypes.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true },
   id_list: { type: DataTypes.INTEGER.UNSIGNED, allowNull: false },
@@ -58,16 +53,12 @@ export const Task = sequelize.define('Task', {
   updatedAt: 'updated_at'
 })
 
-// ----- relations (1,n) -----
-// un user a 0..n sessions, une session appartient à 1 user
 User.hasMany(Session, { foreignKey: 'id_user', onDelete: 'CASCADE' })
 Session.belongsTo(User, { foreignKey: 'id_user' })
 
-// un user a 1..n listes
 User.hasMany(ToDoList, { foreignKey: 'id_user', onDelete: 'CASCADE' })
 ToDoList.belongsTo(User, { foreignKey: 'id_user' })
 
-// une liste a 1..n tâches (supprimer la liste supprime ses tâches)
 ToDoList.hasMany(Task, { foreignKey: 'id_list', onDelete: 'CASCADE' })
 Task.belongsTo(ToDoList, { foreignKey: 'id_list' })
 

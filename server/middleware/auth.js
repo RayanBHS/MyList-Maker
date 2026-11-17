@@ -2,12 +2,10 @@ import crypto from 'crypto'
 import { Op } from 'sequelize'
 import { User, Session } from '../models/index.js'
 
-// Hash and return the hashed token
 export function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex')
 }
 
-// Create a session in MySQL for a user using hashed token + returns the token
 export async function createSession(idUser) {
   const token = crypto.randomBytes(32).toString('hex')
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -15,7 +13,6 @@ export async function createSession(idUser) {
   return token
 }
 
-// Check header and token
 export async function requireAuth(req, res, next) {
   const header = req.headers.authorization || ''
   const token = header.startsWith('Bearer ') ? header.slice(7) : ''

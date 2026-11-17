@@ -1,23 +1,16 @@
--- ============================================================
--- MyList Maker - schéma de la base de données (MySQL / MariaDB)
--- Import direct :  mysql -u root -p < sql/schema.sql
--- ============================================================
-
 CREATE DATABASE IF NOT EXISTS mylist_maker
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
 USE mylist_maker;
 
--- On supprime dans l'ordre inverse des dépendances (permet de relancer le script)
+
 DROP TABLE IF EXISTS task;
 DROP TABLE IF EXISTS session;
 DROP TABLE IF EXISTS to_do_list;
 DROP TABLE IF EXISTS `user`;
 
--- ------------------------------------------------------------
--- User
--- ------------------------------------------------------------
+
 CREATE TABLE `user` (
   id_user       INT UNSIGNED NOT NULL AUTO_INCREMENT,
   username      VARCHAR(50)  NOT NULL,
@@ -29,14 +22,11 @@ CREATE TABLE `user` (
   UNIQUE KEY uq_user_email (email)
 ) ENGINE=InnoDB;
 
--- ------------------------------------------------------------
--- session : un user a 0..n sessions, une session appartient à 1 user (1,1)
--- (le schéma ne donne pas d'attributs, on met le minimum utile)
--- ------------------------------------------------------------
+
 CREATE TABLE session (
   id_session INT UNSIGNED NOT NULL AUTO_INCREMENT,
   id_user    INT UNSIGNED NOT NULL,
-  token_hash CHAR(64)     NOT NULL,            -- SHA-256 du token envoyé au navigateur
+  token_hash CHAR(64)     NOT NULL,
   created_at DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   expires_at DATETIME     NOT NULL,
   PRIMARY KEY (id_session),
@@ -46,9 +36,7 @@ CREATE TABLE session (
     REFERENCES `user` (id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ------------------------------------------------------------
--- TO_DO_LIST : un user a 1..n listes (ajout de `color` pour le front)
--- ------------------------------------------------------------
+
 CREATE TABLE to_do_list (
   id_list     INT UNSIGNED NOT NULL AUTO_INCREMENT,
   id_user     INT UNSIGNED NOT NULL,
@@ -62,9 +50,7 @@ CREATE TABLE to_do_list (
     REFERENCES `user` (id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- ------------------------------------------------------------
--- Task : une liste a 1..n tâches (ajout de `location` et `flagged` pour le front)
--- ------------------------------------------------------------
+
 CREATE TABLE task (
   id_task      INT UNSIGNED NOT NULL AUTO_INCREMENT,
   id_list      INT UNSIGNED NOT NULL,
