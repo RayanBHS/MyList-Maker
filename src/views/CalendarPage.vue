@@ -4,7 +4,7 @@
     <p v-if="dates.length == 0" class="vide">No task with a date</p>
     <div class="liste-taches">
       <div v-for="date in dates" :key="date">
-        <h4 :class="{ today: date == today }">{{ formatDate(date) }}</h4>
+        <h4 :class="{ today: date == today, passee: date < today }">{{ formatDate(date) }}</h4>
         <TaskItem
           v-for="task in getTasksOfDate(date)"
           :key="task.id"
