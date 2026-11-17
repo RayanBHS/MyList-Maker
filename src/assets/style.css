@@ -860,6 +860,10 @@ input:focus, select:focus, textarea:focus {
   margin-top: 18px;
 }
 
+.liste-taches h4.passee {
+  color: #8e44ad;
+}
+
 .liste-taches h4.today {
   color: #ef4848;
 }
